@@ -78,3 +78,16 @@ The password hash is never included in serialized user data.
 `ExpenseCreateSchema` accepts `title`, `amount`, `category`, and an optional
 `note`. IDs, timestamps, and the owning user ID are assigned by the database
 or authenticated application flow.
+
+## Testing
+
+Run the complete independent test suite from the project root:
+
+```bash
+python -m pytest -q
+```
+
+The tests use an in-memory SQLite database. They cover password hashing and
+authentication, model validation, user-expense relationships, cascade delete,
+schema serialization, and schema input validation. They do not require the
+development database or seeded records.
