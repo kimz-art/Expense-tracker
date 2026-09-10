@@ -44,3 +44,37 @@ flask --app app run --port 5555
 The application uses `sqlite:///app.db` by default. Set `DATABASE_URI` in a
 `.env` file to use another database. Set `SECRET_KEY` to a private value when
 running outside local development.
+
+## Schemas
+
+The schema definitions are in `schemas.py` and are intended to keep API
+serialization consistent with the SQLAlchemy models.
+
+### User response
+
+```json
+{
+	"id": 1,
+	"username": "amina"
+}
+```
+
+The password hash is never included in serialized user data.
+
+### Expense response
+
+```json
+{
+	"id": 1,
+	"title": "Groceries",
+	"amount": 54.3,
+	"category": "Food",
+	"note": "Weekly shop",
+	"created_at": "2026-09-10T12:00:00",
+	"user_id": 1
+}
+```
+
+`ExpenseCreateSchema` accepts `title`, `amount`, `category`, and an optional
+`note`. IDs, timestamps, and the owning user ID are assigned by the database
+or authenticated application flow.
