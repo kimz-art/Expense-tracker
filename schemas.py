@@ -12,6 +12,7 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
         model = User
         load_instance = False
         include_fk = False
+        exclude = ('_password_hash',)
 
     id = fields.Integer(dump_only=True)
     username = fields.String(required=True, validate=validate.Length(min=1, max=80))
