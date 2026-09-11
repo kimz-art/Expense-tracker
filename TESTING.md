@@ -15,6 +15,8 @@ that routes can use when they are added or updated.
 - `tests/test_relationships.py` checks ownership and cascade deletion.
 - `tests/test_schemas.py` checks JSON serialization, input validation, and the
   register/login/auth-user contracts used by the auth branch.
+- `tests/test_auth_routes.py` checks the public register, login, and current
+  user response data flow.
 - `tests/conftest.py` provides an isolated in-memory SQLite database.
 
 ## Running tests

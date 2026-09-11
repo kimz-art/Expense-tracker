@@ -28,6 +28,14 @@ user_body = auth_user_schema.dump(user)
 accepts `email` and `password`. Password fields are load-only and cannot be
 serialized into a response.
 
+The route contract tested by `tests/test_auth_routes.py` is:
+
+- `POST /register` returns status `201` and a public `user` object.
+- `POST /login` returns status `200`, an `access_token`, and a public `user`.
+- `GET /me` returns status `200` and the authenticated public user.
+
+Each public user object contains only `id`, `username`, and `email`.
+
 `ExpenseCreateSchema` validates client-supplied fields. The authenticated user
 ID should be assigned by the route or service layer rather than accepted from
 untrusted request data. `ExpenseSchema` includes `user_id` for response data.

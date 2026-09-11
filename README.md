@@ -54,9 +54,9 @@ serialization consistent with the SQLAlchemy models.
 
 ```json
 {
-	"id": 1,
-	"username": "amina",
-	"email": "amina@example.com"
+  "id": 1,
+  "username": "amina",
+  "email": "amina@example.com"
 }
 ```
 
@@ -99,6 +99,6 @@ python -m pytest -q
 
 The tests use an in-memory SQLite database. They cover password hashing and
 authentication, model validation, user-expense relationships, cascade delete,
-schema serialization, and schema input validation. They do not require the
-development database or seeded records.
- 
+schema serialization, schema input validation, and the `/register`, `/login`,
+and `/me` authentication data flow. They do not require the development
+database or seeded records.
