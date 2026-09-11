@@ -2,7 +2,7 @@ from models import Expense, User
 
 
 def test_user_expenses_relationship_returns_owned_expenses(database):
-    user = User(username='relationship-user')
+    user = User(username='relationship-user', email='relationship@example.com')
     user.password_hash = 'TestPassword123'
     user.expenses = [
         Expense(title='Coffee', amount=4.50, category='Food'),
@@ -17,7 +17,7 @@ def test_user_expenses_relationship_returns_owned_expenses(database):
 
 
 def test_deleting_user_deletes_owned_expenses(database):
-    user = User(username='delete-user')
+    user = User(username='delete-user', email='delete@example.com')
     user.password_hash = 'TestPassword123'
     user.expenses = [Expense(title='Coffee', amount=4.50, category='Food')]
     database.session.add(user)

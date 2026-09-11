@@ -55,7 +55,8 @@ serialization consistent with the SQLAlchemy models.
 ```json
 {
 	"id": 1,
-	"username": "amina"
+	"username": "amina",
+	"email": "amina@example.com"
 }
 ```
 
@@ -79,6 +80,15 @@ The password hash is never included in serialized user data.
 `note`. IDs, timestamps, and the owning user ID are assigned by the database
 or authenticated application flow.
 
+### Authentication payloads
+
+Registration accepts `username`, `email`, and `password`. Login accepts
+`email` and `password`. Both user responses expose only `id`, `username`, and
+`email`; password hashes and submitted passwords are never serialized.
+
+The auth branch returns these public user fields from `POST /register`,
+`POST /login`, and `GET /me`. Login additionally returns an `access_token`.
+
 ## Testing
 
 Run the complete independent test suite from the project root:
@@ -91,3 +101,4 @@ The tests use an in-memory SQLite database. They cover password hashing and
 authentication, model validation, user-expense relationships, cascade delete,
 schema serialization, and schema input validation. They do not require the
 development database or seeded records.
+ 

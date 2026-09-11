@@ -4,7 +4,7 @@ from models import Expense, User
 
 
 def make_user():
-    user = User(username='expense-owner')
+    user = User(username='expense-owner', email='owner@example.com')
     user.password_hash = 'TestPassword123'
     return user
 

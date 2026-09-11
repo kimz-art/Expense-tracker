@@ -16,6 +16,7 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
 
     id = fields.Integer(dump_only=True)
     username = fields.String(required=True, validate=validate.Length(min=1, max=80))
+    email = fields.Email(required=True, validate=validate.Length(max=120))
 
 
 class ExpenseSchema(ma.SQLAlchemyAutoSchema):
@@ -40,8 +41,28 @@ class ExpenseCreateSchema(Schema):
     note = fields.String(allow_none=True)
 
 
+class RegisterSchema(Schema):
+    username = fields.String(required=True, validate=validate.Length(min=1, max=80))
+    email = fields.Email(required=True, validate=validate.Length(max=120))
+    password = fields.String(required=True, load_only=True, validate=validate.Length(min=1))
+
+
+class LoginSchema(Schema):
+    email = fields.Email(required=True)
+    password = fields.String(required=True, load_only=True, validate=validate.Length(min=1))
+
+
+class AuthUserSchema(Schema):
+    id = fields.Integer(required=True)
+    username = fields.String(required=True)
+    email = fields.Email(required=True)
+
+
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 expense_schema = ExpenseSchema()
 expenses_schema = ExpenseSchema(many=True)
 expense_create_schema = ExpenseCreateSchema()
+register_schema = RegisterSchema()
+login_schema = LoginSchema()
+auth_user_schema = AuthUserSchema()
