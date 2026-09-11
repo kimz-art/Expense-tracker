@@ -2,5 +2,9 @@ instance/
 *.pyc
 __pycache__/
 .env
+<<<<<<< HEAD
+.venv/venv/
+=======
 .venv/
 venv/
+>>>>>>> shared/main
