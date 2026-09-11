@@ -1,8 +1,8 @@
-"""create users and expenses tables
+"""create users and expenses tables with email
 
-Revision ID: f59234a99055
+Revision ID: ae90fdf51e63
 Revises: 
-Create Date: 2026-09-09 13:57:56.259708
+Create Date: 2026-09-11 14:26:00.769415
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'f59234a99055'
+revision = 'ae90fdf51e63'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,8 +21,10 @@ def upgrade():
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=80), nullable=False),
+    sa.Column('email', sa.String(length=120), nullable=False),
     sa.Column('password_hash', sa.String(length=128), nullable=False),
     sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
     )
     op.create_table('expenses',
