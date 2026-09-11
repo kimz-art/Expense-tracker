@@ -6,6 +6,7 @@ from schemas import (
     AuthUserSchema,
     ExpenseCreateSchema,
     ExpenseSchema,
+    ExpenseUpdateSchema,
     LoginSchema,
     RegisterSchema,
     UserSchema,
@@ -69,6 +70,19 @@ def test_expense_create_schema_rejects_invalid_amount():
             'amount': 0,
             'category': 'Food',
         })
+
+
+def test_expense_input_schemas_keep_server_fields_out_of_requests():
+    with pytest.raises(ValidationError):
+        ExpenseCreateSchema().load({
+            'title': 'Lunch',
+            'amount': 15.25,
+            'category': 'Food',
+            'user_id': 99,
+        })
+
+    payload = ExpenseUpdateSchema().load({'note': 'Updated note'})
+    assert payload == {'note': 'Updated note'}
 
 
 def test_register_schema_validates_authentication_payload():
