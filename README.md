@@ -89,6 +89,31 @@ Registration accepts `username`, `email`, and `password`. Login accepts
 The auth branch returns these public user fields from `POST /register`,
 `POST /login`, and `GET /me`. Login additionally returns an `access_token`.
 
+## Expense endpoints
+
+All expense endpoints require the bearer token returned by `POST /login`.
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| GET | `/expenses?page=1&per_page=10` | List only the signed-in user's expenses |
+| POST | `/expenses` | Create an expense for the signed-in user |
+| PATCH | `/expenses/<id>` | Update an owned expense |
+| DELETE | `/expenses/<id>` | Delete an owned expense |
+
+Expense list responses include `expenses`, `total`, `pages`, `current_page`,
+and `per_page`. Create and update payloads accept `title`, `amount`,
+`category`, and optional `note`. The server supplies `user_id`; clients must
+not submit it.
+
+Example authenticated request:
+
+```bash
+curl -X POST http://localhost:5555/expenses \
+	-H "Authorization: Bearer <access-token>" \
+	-H "Content-Type: application/json" \
+	-d '{"title":"Lunch","amount":15.25,"category":"Food"}'
+```
+
 ## Testing
 
 Run the complete independent test suite from the project root:
@@ -100,5 +125,6 @@ python -m pytest -q
 The tests use an in-memory SQLite database. They cover password hashing and
 authentication, model validation, user-expense relationships, cascade delete,
 schema serialization, schema input validation, and the `/register`, `/login`,
-and `/me` authentication data flow. They do not require the development
-database or seeded records.
+and `/me` authentication data flow. Resource route tests also cover
+pagination, ownership protection, CRUD behavior, and invalid updates. They do
+not require the development database or seeded records.
