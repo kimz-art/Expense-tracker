@@ -67,3 +67,21 @@ def test_me_returns_authenticated_public_user_data(client, database):
         'username': 'me-user',
         'email': 'me@example.com',
     }
+
+
+def test_auth_routes_reject_incomplete_credentials(client):
+    register = client.post('/register', json={'username': 'missing-email'})
+    login = client.post('/login', json={'email': 'missing@example.com'})
+
+    assert register.status_code == 400
+    assert login.status_code == 400
+
+
+def test_me_rejects_missing_and_invalid_tokens(client, database):
+    assert client.get('/me').status_code == 401
+    response = client.get(
+        '/me', headers={'Authorization': 'Bearer definitely-invalid'}
+    )
+
+    assert response.status_code == 401
+    assert response.json['error'] == 'Invalid token'
