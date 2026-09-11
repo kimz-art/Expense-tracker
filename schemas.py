@@ -37,6 +37,13 @@ class ExpenseCreateSchema(Schema):
     note = fields.String(allow_none=True)
 
 
+class ExpenseUpdateSchema(Schema):
+    title = fields.String(validate=validate.Length(min=1, max=120))
+    amount = fields.Float(validate=validate.Range(min=0.01))
+    category = fields.String(validate=validate.Length(min=1, max=60))
+    note = fields.String(allow_none=True)
+
+
 class RegisterSchema(Schema):
     username = fields.String(required=True, validate=validate.Length(min=1, max=80))
     email = fields.Email(required=True, validate=validate.Length(max=120))
@@ -59,6 +66,7 @@ users_schema = UserSchema(many=True)
 expense_schema = ExpenseSchema()
 expenses_schema = ExpenseSchema(many=True)
 expense_create_schema = ExpenseCreateSchema()
+expense_update_schema = ExpenseUpdateSchema()
 register_schema = RegisterSchema()
 login_schema = LoginSchema()
 auth_user_schema = AuthUserSchema()
