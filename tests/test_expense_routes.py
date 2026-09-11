@@ -103,3 +103,19 @@ def test_expense_create_rejects_client_owned_user_id(client):
 
     assert response.status_code == 400
     assert 'user_id' in response.json['errors']
+
+
+def test_expense_update_rejects_invalid_model_values(client):
+    headers = register_and_login(client, 'validation-user', 'validation@example.com')
+    created = client.post(
+        '/expenses', json=expense_payload(), headers=headers
+    )
+
+    response = client.patch(
+        f"/expenses/{created.json['id']}",
+        json={'amount': 0},
+        headers=headers,
+    )
+
+    assert response.status_code == 400
+    assert response.json['error'] == 'Amount must be a positive number'
