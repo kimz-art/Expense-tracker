@@ -8,6 +8,7 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
     _password_hash = db.Column('password_hash', db.String(128), nullable=False)
 
     expenses = db.relationship('Expense', back_populates='user', cascade='all, delete-orphan')
@@ -28,6 +29,12 @@ class User(db.Model):
         if not value or len(value.strip()) == 0:
             raise ValueError('Username cannot be empty')
         return value
+
+    @validates('email')
+    def validate_email(self, key, value):
+     if not value or '@' not in value or '.' not in value.split('@')[-1]:
+        raise ValueError('A valid email is required')
+     return value
 
     def __repr__(self):
         return f'<User {self.id}: {self.username}>'
