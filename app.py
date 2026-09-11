@@ -13,12 +13,15 @@ from extensions import db, migrate, bcrypt, ma, cors
 load_dotenv()
 
 app = Flask(__name__)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URI', 'sqlite:///app.db'
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-change-me')
-app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'dev-jwt-secret-change-me')
+app.config['JWT_SECRET_KEY'] = os.environ.get(
+    'JWT_SECRET_KEY', 'dev-jwt-secret-change-me'
+)
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
 
 db.init_app(app)
@@ -26,10 +29,10 @@ migrate.init_app(app, db)
 bcrypt.init_app(app)
 ma.init_app(app)
 cors.init_app(app)
+
 jwt = JWTManager(app)
 
-# Import models AFTER extensions are initialized so their table
-# definitions register with `db`.
+# Import models AFTER extensions are initialized
 from models import User, Expense  # noqa: E402,F401
 
 
@@ -67,7 +70,9 @@ def register():
     password = data.get('password')
 
     if not username or not email or not password:
-        return jsonify({'error': 'Username, email, and password are required'}), 400
+        return jsonify({
+            'error': 'Username, email, and password are required'
+        }), 400
 
     if User.query.filter_by(username=username).first():
         return jsonify({'error': 'Username already exists'}), 400
@@ -101,13 +106,17 @@ def login():
     password = data.get('password')
 
     if not email or not password:
-        return jsonify({'error': 'Email and password are required'}), 400
+        return jsonify({
+            'error': 'Email and password are required'
+        }), 400
 
     user = User.query.filter_by(email=email).first()
+
     if not user or not user.authenticate(password):
         return jsonify({'error': 'Invalid email or password'}), 401
 
     access_token = create_access_token(identity=str(user.id))
+
     return jsonify({
         'message': 'Login successful.',
         'access_token': access_token,
