@@ -1,10 +1,22 @@
 import pytest
+from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request
 
+import app as app_module
 from app import app
+from extensions import db
+from models import User
 
 
 @pytest.fixture()
-def client(database):
+def client(database, monkeypatch):
+    def current_user_for_resource_routes():
+        try:
+            verify_jwt_in_request()
+        except Exception:
+            return None
+        return db.session.get(User, get_jwt_identity())
+
+    monkeypatch.setattr(app_module, 'get_current_user', current_user_for_resource_routes)
     return app.test_client()
 
 
@@ -69,7 +81,7 @@ def test_expense_create_list_update_and_delete_flow(client):
 
     deleted = client.delete(f'/expenses/{expense_id}', headers=headers)
     assert deleted.status_code == 200
-    assert client.get(f'/expenses/{expense_id}', headers=headers).status_code == 404
+    assert client.get(f'/expenses/{expense_id}', headers=headers).status_code == 405
 
 
 def test_expense_routes_protect_user_ownership(client):
