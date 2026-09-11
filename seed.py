@@ -5,9 +5,9 @@ with app.app_context():
     db.drop_all()
     db.create_all()
 
-    amina = User(username='amina')
+    amina = User(username='amina', email='amina@example.com')
     amina.password_hash = 'password123'
-    brian = User(username='brian')
+    brian = User(username='brian', email='brian@example.com')
     brian.password_hash = 'password456'
     db.session.add_all([amina, brian])
     db.session.commit()
